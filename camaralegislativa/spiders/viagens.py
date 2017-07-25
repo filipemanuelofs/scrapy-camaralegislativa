@@ -20,7 +20,7 @@ class ViagensSpider(scrapy.Spider):
             termino = registro.xpath('./td[2]/text()').extract_first()
             assunto = registro.xpath('./td[3]/text()').extract_first()
             destino = registro.xpath('./td[4]/text()').extract_first()
-            deputado = registro.xpath('').extract_first()
+            deputado = registro.xpath('./td[5]//span/text()').extract_first()
             cancelada = registro.xpath('./td[6]/text()').extract_first()
 
             yield {

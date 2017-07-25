@@ -5,7 +5,7 @@ import scrapy
 class ViagensSpider(scrapy.Spider):
     name = 'viagens'
     allowed_domains = [
-        'www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati=01%2F06%2F2017&datf=30%2F06%2F2017&nome-evento='
+        'www.camara.leg.br'
     ]
     start_urls = [
         'http://www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati=01%2F06%2F2017&datf=30%2F06%2F2017&nome-evento=/'

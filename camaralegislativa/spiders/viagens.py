@@ -13,6 +13,7 @@ class ViagensSpider(scrapy.Spider):
         registros = response.xpath('//*[@id="content"]/div[2]/div/div/div/table/tbody[2]/tr')
 
         for registro in registros:
+            urlRelatorio = response.urljoin(registro.xpath('translate(normalize-space(./td[5]//tr[1]/td[2]/a/@href), " ","")').extract_first())
             yield {
                 'titulo': response.xpath('//*[@id="content"]/h3/text()').extract_first(),
                 'inicio': registro.xpath('./td[1]/text()').extract_first(),
@@ -23,8 +24,18 @@ class ViagensSpider(scrapy.Spider):
                 'viagemCancelada': registro.xpath('./td[6]/text()').extract_first(),
                 'situacaoRegistro': {
                     'situacao': registro.xpath('normalize-space(./td[5]//tr[1]/td[2]/text())').extract_first(),
-                    'linkRelatorio': response.urljoin(
-                        registro.xpath('translate(normalize-space(./td[5]//tr[1]/td[2]/a/@href), " ","")')
-                        .extract_first())
+                    'linkRelatorio': urlRelatorio
+                },
+                'detalheViagem': {
+                    'quantidade': scrapy.Request(url=urlRelatorio, callback=self.parse_detail),
+                    'valor': ''
                 }
+            }
+    
+    def parse_detail(self, response):
+        registros = response.xpath('//*[@id="content"]/div/div/div/div/div[2]/ul')
+        
+        for registro in registros:
+            yield { 
+                registro.xpath('./li[1]/text()').extract_first()
             }

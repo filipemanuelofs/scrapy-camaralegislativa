@@ -8,7 +8,14 @@
 import scrapy
 
 
-class CamaralegislativaItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ViagemParlamentarItem(scrapy.Item):
+    inicio = scrapy.Field()
+    termino = scrapy.Field()
+    assunto = scrapy.Field()
+    destino = scrapy.Field()
+    deputado = scrapy.Field()
+    url_relatorio = scrapy.Field()
+    situacao_relatorio = scrapy.Field()
+    viagem_cancelada = scrapy.Field()
+    qnt_diarias = scrapy.Field()
+    valor = scrapy.Field()

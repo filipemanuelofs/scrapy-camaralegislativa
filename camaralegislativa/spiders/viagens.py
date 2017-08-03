@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import logging
 from camaralegislativa.items import ViagemParlamentarItem
 
 class ViagensSpider(scrapy.Spider):
+    logging.getLogger('scrapy').setLevel(logging.WARNING)
     name = 'viagens'
     start_urls = [
         'http://www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati={0}&datf={1}&nome-evento='.format('01/01/2017', '31/03/2017')
@@ -10,7 +12,6 @@ class ViagensSpider(scrapy.Spider):
     viagem_parlamentar = ViagemParlamentarItem()
 
     def parse(self, response):
-
         registros = response.xpath('//*[@id="content"]/div[2]/div/div/div/table/tbody[2]/tr')
 
         for registro in registros:
@@ -29,9 +30,8 @@ class ViagensSpider(scrapy.Spider):
 
     def parse_detail(self, response):
         registros = response.xpath('//*[@id="content"]/div/div/div/div/div[2]/ul')
-        
         for registro in registros:
             self.viagem_parlamentar['qnt_diarias'] = registro.xpath('normalize-space(./li[1]/text())').extract_first()
             self.viagem_parlamentar['valor'] = registro.xpath('normalize-space(./li[2]/text())').extract_first()
-
-        yield self.viagem_parlamentar
+            
+            yield self.viagem_parlamentar

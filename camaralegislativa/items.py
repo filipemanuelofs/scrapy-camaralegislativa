@@ -19,3 +19,4 @@ class ViagemParlamentarItem(scrapy.Item):
     viagem_cancelada = scrapy.Field()
     qnt_diarias = scrapy.Field()
     valor = scrapy.Field()
+    tipo_passagem = scrapy.Field()

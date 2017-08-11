@@ -27,11 +27,12 @@ class ViagensSpider(scrapy.Spider):
             viagem_parlamentar['url_relatorio'] = response.urljoin(
                 registro.xpath('translate(normalize-space(./td[5]//tr[1]/td[2]/a/@href), " ","")').extract_first())
 
-            request = scrapy.Request(url_relatorio, callback=self.parse_detail)
+            request = scrapy.Request(url_relatorio, callback=self.parse_detalhe_viagem)
             request.meta['item'] = viagem_parlamentar
             yield request
 
-    def parse_detail(self, response):
+    @staticmethod
+    def parse_detalhe_viagem(self, response):
         viagem_parlamentar = response.meta['item']
         viagem_parlamentar['qnt_diarias'] = response.xpath(
             'substring-after(normalize-space(/*//li[contains(text(), "Quantidade")]/text()), ": ")').extract_first()

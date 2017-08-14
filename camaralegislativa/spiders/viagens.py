@@ -9,6 +9,9 @@ class ViagensSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        '''
+        Parse responsável pela extração inicial da página
+        '''
         registros = response.xpath('//*[@id="content"]/div[2]/div/div/div/table/tbody[2]/tr')
 
         for registro in registros:
@@ -31,8 +34,10 @@ class ViagensSpider(scrapy.Spider):
             request.meta['item'] = viagem_parlamentar
             yield request
 
-    @staticmethod
     def parse_detalhe_viagem(self, response):
+        '''
+        Parse responsável pelo detalhe da viagem do deputado
+        '''
         viagem_parlamentar = response.meta['item']
         viagem_parlamentar['qnt_diarias'] = response.xpath(
             'substring-after(normalize-space(/*//li[contains(text(), "Quantidade")]/text()), ": ")').extract_first()

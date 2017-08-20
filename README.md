@@ -1,5 +1,4 @@
 # scrapy-camaralegislativa
----
 Utilização do Scrapy para algumas páginas da Câmara Legislativa.
 
 ## Pré-requisito
@@ -14,7 +13,8 @@ scrapy crawl viagens -a data_inicial=01/06/2017 -a data_final=30/06/2017
 O resultado será escrito no arquivo ```viagens.json```.
 
 ### Argumentos
-| Argumento    | Descrição                   |
-|--------------|-----------------------------|
-| data_inicial | Período inicial da consulta |
-| data_final   | Período final da consulta   |
+|Argumentos|Descrição|
+|----------|---------|
+|data_inicial | Período inicial da consulta |
+|data_final | Período final da consulta |
+- **O período inicial e final não podem ultrapassar 3 meses**

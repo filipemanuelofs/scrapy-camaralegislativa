@@ -4,9 +4,15 @@ from camaralegislativa.items import ViagemParlamentarItem
 
 class ViagensSpider(scrapy.Spider):
     name = 'viagens'
-    start_urls = [
-        'http://www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati={0}&datf={1}&nome-evento='.format('01/06/2017', '30/06/2017')
-    ]
+
+    def start_requests(self):
+        if not self.data_inicial and self.data_final:
+            raise ValueError('Você precisa passar argumentos: data_inicial e data_final.')
+
+        yield scrapy.Request(
+            'http://www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati={0}&datf={1}&nome-evento='.format(self.data_inicial, self.data_final)
+        )
+
 
     def parse(self, response):
         '''

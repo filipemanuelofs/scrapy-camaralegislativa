@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from collections import Counter
 from camaralegislativa.items import ViagemParlamentarItem
 
 class ViagensSpider(scrapy.Spider):
+    '''
+    Classe responsável por gerenciar o crawler de viagens
+    '''
     name = 'viagens'
+    data_inicial = None
+    data_final = None
+    destinos = []
 
     def start_requests(self):
         if not self.data_inicial and self.data_final:
-            raise ValueError('Você precisa passar argumentos: data_inicial e data_final.')
+            raise ValueError('Você precisa passar argumentos.')
 
         yield scrapy.Request(
             'http://www.camara.leg.br/missao-oficial/missao-pesquisa?deputado=1&nome-deputado=&nome-servidor=&dati={0}&datf={1}&nome-evento='.format(self.data_inicial, self.data_final)
@@ -38,7 +45,12 @@ class ViagensSpider(scrapy.Spider):
 
             request = scrapy.Request(url_relatorio, callback=self.parse_detalhe_viagem)
             request.meta['item'] = viagem_parlamentar
+
+            self.destinos.append(viagem_parlamentar['destino'].split(','))
+
             yield request
+
+        self.logger.info('Frequência dos destinos: ' + Counter(self.destinos).most_common())
 
     def parse_detalhe_viagem(self, response):
         '''
@@ -51,5 +63,4 @@ class ViagensSpider(scrapy.Spider):
             'substring-after(normalize-space(/*//li[contains(text(), "Valor")]/text()), ": ")').extract_first()
         viagem_parlamentar['tipo_passagem'] = response.xpath(
             'substring-after(normalize-space(/*//li[contains(text(), "Passagem")]/text()), ": ")').extract_first()
-
         yield viagem_parlamentar

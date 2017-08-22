@@ -14,11 +14,11 @@ class CamaralegislativaPipeline(object):
     def process_item(self, item, spider):
         self.destinos.append(item['destino'])
 
-        if item['valor'].isdigit():
+        if item['valor']:
             self.valores.append(float(item['valor']))
 
         return item
 
     def close_spider(self, spider):
         spider.logger.info(Counter(self.destinos).most_common())
-        spider.logger.info(sum(v for v in self.valores))
+        spider.logger.info(sum(self.valores))
